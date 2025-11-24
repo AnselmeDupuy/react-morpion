@@ -7,16 +7,28 @@ function Board() {
 
     const [board, setBoard] = useState<Square[]>(BoardLogic.createBoard());
     const [currentSymbol, setCurrentSymbol] = useState<"X" | "O">("X");
+    const [moveListe, setMoveListe]= useState<number[]>([]);
 
 
     const handleClick = (squareId: number) => {
         const boardLogic = new BoardLogic(board);
-        boardLogic.playSymbol(squareId, currentSymbol);
-        setBoard(boardLogic.getBoard());
-        setCurrentSymbol(currentSymbol === "X" ? "O" : "X");
+
+        if (moveListe.length == 6) {
+            boardLogic.clearSymbol(moveListe[0]);
+            moveListe.shift();
+            moveListe[0]
+        }
+        
+        if (boardLogic.playSymbol(squareId, currentSymbol) !== false) {
+            boardLogic.playSymbol(squareId, currentSymbol);
+            moveListe.push(squareId);
+            setBoard(boardLogic.getBoard());
+            setCurrentSymbol(currentSymbol === "X" ? "O" : "X");
+        }
+
         const winner = boardLogic.checkWin();
         if (winner) {
-            alert(`${winner} wins!`);
+            console.log(winner, "wins!")
         }
     }
 

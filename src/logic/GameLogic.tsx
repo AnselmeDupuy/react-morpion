@@ -10,9 +10,15 @@ export class Board {
     playSymbol(squareId: number, symbol: "X" | "O" | "") {
         if (this.board[squareId].value !== "") {
             console.error("Square already played");
-            return;
+            return false;
         }
         this.board[squareId].value = symbol;
+    }
+
+    clearSymbol(squareId: number) {
+        if (this.board[squareId].value !== "") {
+            this.board[squareId].value = "";
+        }
     }
 
     checkWin(): "X" | "O" | null {
@@ -23,6 +29,8 @@ export class Board {
             [0, 3, 6],
             [1, 4, 7],
             [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
         ];
         for (const combination of winningCombinations) {
             const [a, b, c] = combination;

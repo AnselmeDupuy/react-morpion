@@ -1,3 +1,6 @@
+import crossSvg from "../assets/cross.svg";
+import circleSvg from "../assets/circle.svg";
+
 export default function BoardSquare(props: {
     action: (squareId: number) => void;
     squareId: number;
@@ -9,7 +12,8 @@ export default function BoardSquare(props: {
             className="board-square"
             onClick={() => props.action(props.squareId)}
         >
-            {props.value}
+            {props.value === "X" && <img src={crossSvg} alt="X" />}
+            {props.value === "O" && <img src={circleSvg} alt="O" />}
         </button>
     );
 }
