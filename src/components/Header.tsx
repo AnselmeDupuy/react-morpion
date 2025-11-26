@@ -1,12 +1,26 @@
-import { Link } from "react-router";
+import { FaRedoAlt } from "react-icons/fa";
 
-function Header() {
-    return (    
-        
-        <Link className="game-button" to="/ranking">Ranking</Link>
-        
+export default function Header({
+    currentPlayer,
+    onReset,
+}: {
+    currentPlayer: "X" | "O";
+    onReset: () => void;
+}) {
+    return (
+        <div className="header">
+            <div className="header-left">
+                <span className="symbol x">X</span>
+                <span className="symbol o">O</span>
+            </div>
+
+            <div className="turn-indicator">
+                {currentPlayer} TURN
+            </div>
+
+            <button className="reset-btn" onClick={onReset}>
+                <FaRedoAlt size={16} />
+            </button>
+        </div>
     );
-
 }
-
-export default Header;

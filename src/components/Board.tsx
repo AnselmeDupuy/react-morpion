@@ -4,6 +4,9 @@ import BoardSquare from "./BoardSquare";
 import type { Square } from "../types/Square";
 import { Board as BoardLogic } from "../logic/GameLogic";
 import WinModal from "./winModal";
+import DrawModal from "./drawModal";
+import Header from "./Header";
+
 
 export type CellValue = "X" | "O" | null;
 export type GameState = "playing" | "won" | "draw";
@@ -14,6 +17,7 @@ const initialState = {
     gameState: "playing" as GameState,
     variant: "basic" as GameVariant,
 };
+
 
 function Board() {
 
@@ -33,11 +37,24 @@ function Board() {
     const scoreContext = createContext({ winner, playerX, playerO, score})
 
     const resetBoard = () => {
-        board.map((square) => {
-            square.value = "";
-        });
-        setMoveListe([])
-    }
+        const newBoard = BoardLogic.createBoard();
+        setBoard(newBoard);
+        setMoveListe([]);
+        setWinner(null);
+        setGameState("playing");
+        setCurrentSymbol("X");
+    };
+
+
+    const getStoredScores = () => {
+        const scores = localStorage.getItem("scores");
+        return scores ? JSON.parse(scores) : { };
+    };
+
+    const saveStoredScores = (scores: any) => {
+        localStorage.setItem("scores", JSON.stringify(scores));
+    };
+
     useEffect(() => {
         setGameVariant(variant === "variant" ? "variant" : "basic");
         setInit({currentPlayer: currentSymbol, gameState, variant: gameVariant});
@@ -64,6 +81,11 @@ function Board() {
             setMoveListe([...moveListe]);
             setBoard(boardLogic.getBoard());
             setCurrentSymbol(currentSymbol === "X" ? "O" : "X");
+            
+            if (playerO === "AI" && currentSymbol === "O") {
+                const ID = Math.floor(Math.random() * 9);
+                boardLogic.playSymbol(ID, currentSymbol, moveListe);
+            }
 
             
             const winner = boardLogic.checkWin();
@@ -71,7 +93,15 @@ function Board() {
                 console.log(winner, "wins!")
                 setWinner(winner);
                 setGameState("won");
-                setScore({score: score.score + 1});
+
+                const winnerName = winner === "X" ? playerX : playerO;
+
+                const scores = getStoredScores();
+
+                scores[winnerName] = (scores[winnerName] || 0) + 1;
+
+                saveStoredScores(scores);
+
                 return winner;
             }
 
@@ -86,10 +116,12 @@ function Board() {
   
   return (
     <>
-    <div>
-    <p>Variant: {init.variant}</p>
-    <h1>Au tour de {init.currentPlayer} de jouer</h1>
-    </div>
+
+    <Header
+        currentPlayer={currentSymbol}
+        onReset={resetBoard}
+    />
+
     <div className="board">
         {board.map((square) => (
             <>
@@ -102,74 +134,22 @@ function Board() {
                 nextToRemove={moveListe.length === 6 && gameVariant === "variant" ? moveListe[0] : -1}
                 winner={winner}
             />
-            
-            {gameState === "won" && <WinModal />}
+            {gameState === "won" && (
+                <WinModal
+                    action={resetBoard}
+                    winnerSymbol={winner}
+                    winnerName={winner === "X" ? playerX : playerO}
+                />
+            )}
+            {gameState === "draw" && <DrawModal action={resetBoard}/>}
             </>
         ))}
     </div>
+    <button onClick={resetBoard}>Reset</button>
 
-    <button type="button" onClick={() => {resetBoard();}}>
-        Reset Board
-    </button>
+
     </>
   );
 };
 
 export default Board;
-
-/*
-import { useCallback, useState } from "react";
-import Grid from "./Grid";
-
-export type CellValue = "X" | "O" | null;
-export type GameState = "playing" | "won" | "draw";
-export type GameVariant = "classic" | "3-shots";
-
-const initialState = {
-    variant: "classic" as GameVariant,
-    currentPlayer: "X" as CellValue,
-    cells: Array(9).fill(null) as CellValue[],
-    gameState: "playing" as GameState,
-};
-
-export default function Game() {
-    const [state, setState] = useState(initialState);
-
-    
-
-    function handleCellClick(index: number) {
-        const newCells = [...state.cells];
-        if (newCells[index] !== null) {
-            alert("Cell already filled");
-            return;
-        }
-
-        newCells[index] = state.currentPlayer;
-        setState((prevState) => ({
-            ...prevState,
-            cells: newCells,
-            currentPlayer: prevState.currentPlayer === "X" ? "O" : "X",
-        }));
-    }
-
-    return (
-        <div className="max-w-md mx-auto">
-            <p>Variant: {state.variant}</p>
-            <h1>Au tour de {state.currentPlayer} de jouer</h1>
-            <Grid cells={state.cells} onCellClick={handleCellClick} />
-            <button type="button" onClick={() => resetBoard()}>
-                Reset no options
-            </button>
-            <button type="button" onClick={() => resetBoard({ variant: "3-shots" })}>
-                Reset 3-shots
-            </button>
-            <button
-                type="button"
-                onClick={() => resetBoard({ cells: Array(9).fill("X") })}
-            >
-                Reset cells
-            </button>
-        </div>
-    );
-}
-*/

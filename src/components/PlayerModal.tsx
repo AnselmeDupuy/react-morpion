@@ -19,50 +19,56 @@ function PlayerModal() {
   };
 
   return (
-    <div className="game-options-screen">
-      <h2>Choose Your Player</h2>
+    <div className="home-wrapper">
+      <div className="home-card">
+        <h2>Choose Your Players</h2>
 
-      <input
-        type="text"
-        placeholder="Player 1 Name"
-        value={playerX}
-        onChange={(e) => setPlayerX(e.target.value)}
-      />
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Player X name"
+          value={playerX}
+          onChange={(e) => setPlayerX(e.target.value)}
+        />
 
-      <input
-        type="text"
-        placeholder="Player 2 Name (AI)"
-        value={playerO}
-        onChange={(e) => setPlayerO(e.target.value)}
-      />
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Player O name"
+          value={playerO}
+          onChange={(e) => setPlayerO(e.target.value)}
+        />
 
-      <div className="variant-section">
-        <label>
-          <input
-            type="radio"
-            name="symbol"
-            value="basic"
-            checked={variant === "basic"}
-            onChange={(e) => setVariant(e.target.value)}
-          />
-          Basic
-        </label>
+        <h3>Game Mode</h3>
 
-        <label>
-          <input
-            type="radio"
-            name="symbol"
-            value="variant"
-            checked={variant === "variant"}
-            onChange={(e) => setVariant(e.target.value)}
-          />
-          Variant
-        </label>
+        <div className="radio-row">
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              value="basic"
+              checked={variant === "basic"}
+              onChange={(e) => setVariant(e.target.value)}
+            />
+            Basic
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              value="variant"
+              checked={variant === "variant"}
+              onChange={(e) => setVariant(e.target.value)}
+            />
+            Variant
+          </label>
+        </div>
+
+        <button className="enter-btn" onClick={startGame}>
+          Start Game
+        </button>
       </div>
-
-      <button type="submit" onClick={startGame}>
-        Enter
-      </button>
     </div>
   );
 }

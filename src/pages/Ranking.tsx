@@ -1,8 +1,11 @@
-import { Link } from "react-router";
-
+import Rank from "../components/Rank";
+import Navbar from "../components/navBar";
 function Ranking() {
     return(
-        <Link to="/">Home Page</Link>
+        <>
+        <Navbar />
+        <Rank />
+        </>
     ) 
 }
 
