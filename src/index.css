@@ -92,3 +92,62 @@ button:focus-visible {
   cursor: pointer;
   user-select: none;
 }
+
+.will-be-cleared {
+    color: #ffcccc;
+    border: 2px solid #fdfdfd;
+    animation: pulse-warning 2s infinite;
+}
+
+@keyframes pulse-warning {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.2;
+    }
+}
+
+.circle {
+  color: #F6BC47;
+}
+
+.cross {
+  color: #36CDCA;
+}
+
+.winner-x {
+    background-color: #36CDCA;
+    color: #284551;
+}
+
+.winner-o {
+    background-color: #F6BC47;
+    color: #284551;
+}
+
+.win-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* .player-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+} */

@@ -7,12 +7,13 @@ export class Board {
         this.board = board;
     }
 
-    playSymbol(squareId: number, symbol: "X" | "O" | "") {
-        if (this.board[squareId].value !== "") {
+    playSymbol(squareId: number, symbol: "X" | "O" | "", squareArray: number[]) {
+        if (squareArray.includes(this.board[squareId].id)) {
             console.error("Square already played");
             return false;
         }
         this.board[squareId].value = symbol;
+        return true;
     }
 
     clearSymbol(squareId: number) {

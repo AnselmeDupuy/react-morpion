@@ -1,8 +1,13 @@
-import { Link } from "react-router";
+import PlayerModal from "../components/PlayerModal";
+import Header from "../components/Header";
 
 function Home() {
     return(
-    <Link to="/Game">Game Page</Link>
+        <>
+        <Header />
+        <PlayerModal />
+        
+        </>
     ) 
 }
 
